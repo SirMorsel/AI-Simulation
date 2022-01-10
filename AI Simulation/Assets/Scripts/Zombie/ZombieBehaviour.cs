@@ -64,6 +64,7 @@ public class ZombieBehaviour : MonoBehaviour
         {
             case EnumZombieBehaviour.IDLE:
                 print($"State: {currentBehaviour}");
+                zombieMovement.PatrolWithoutHorde();
                 // move random
                 if (zombieDetectionSenses.CheckIfHearsSomething())
                 {
@@ -85,8 +86,8 @@ public class ZombieBehaviour : MonoBehaviour
                     if (CheckIfIsInRange(zombieDetectionSenses.GetPositionOfNoise(), 3f)) // check if target is in range
                     {
                         // look around function
-                        print($"TIMER-------> {searchCountdown}");
-                        print("Is looking");
+                       // print($"TIMER-------> {searchCountdown}");
+                       // print("Is looking");
                         searchCountdown -= Time.deltaTime;
                         if (zombieDetectionSenses.CheckIfSeesPlayer()) // sees player
                         {
@@ -97,6 +98,7 @@ public class ZombieBehaviour : MonoBehaviour
                         else if (searchCountdown <= 0 && !zombieDetectionSenses.CheckIfSeesPlayer())
                         {
                             //TODO: Maybe stay until noise is off
+                            zombieMovement.StopMoving();
                             currentBehaviour = EnumZombieBehaviour.IDLE;
                             searchCountdown = searchRateMaxTime;
                             zombieDetectionSenses.RemovePositionOfNoise();
@@ -109,6 +111,7 @@ public class ZombieBehaviour : MonoBehaviour
                 print($"State: {currentBehaviour}");
                 if (zombieDetectionSenses.CheckIfSeesPlayer())
                 {
+                    // rotate to player and stop patroling
                     detectionCountdown -= Time.deltaTime;
                     if (detectionCountdown <= 0)
                     {
@@ -118,6 +121,7 @@ public class ZombieBehaviour : MonoBehaviour
                 }
                 else
                 {
+                    zombieMovement.StopMoving();
                     currentBehaviour = EnumZombieBehaviour.IDLE;
                 }
                 break;
