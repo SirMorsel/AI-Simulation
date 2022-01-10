@@ -9,9 +9,16 @@ public class ZombieMovement : MonoBehaviour
     private NavMeshAgent aiAgent;
 
     private float patrolCountdown;
-    private float patrolMaxTimer = 3f;
+    private float patrolMaxTimer = 10f;
 
-    private float patrolRadius = 8f;
+    private float patrolLookCountdown;
+    private float patrolLookMaxTimer = 3f;
+
+    private float patrolRadius = 15f;
+    private bool isMoving = false;
+
+    private Quaternion randomLookAxis = Quaternion.AngleAxis(90, Vector3.up);
+
 
     // Start is called before the first frame update
     void Start()
@@ -23,9 +30,15 @@ public class ZombieMovement : MonoBehaviour
         patrolCountdown = patrolMaxTimer;
     }
 
+    private void Update()
+    {
+        // print(isMoving);
+    }
+
     public void MoveToTarget(Transform target, float speed, float offset = 0)
     {
         aiAgent.isStopped = false;
+        isMoving = true;
         aiAgent.speed = speed;
         aiAgent.stoppingDistance = offset;
         aiAgent.SetDestination(target.position);
@@ -34,6 +47,7 @@ public class ZombieMovement : MonoBehaviour
     public void StopMoving()
     {
         aiAgent.isStopped = true;
+        isMoving = false;
         aiAgent.ResetPath();
         print($"AGENT->>>>> {aiAgent.isStopped}");
     }
@@ -43,19 +57,23 @@ public class ZombieMovement : MonoBehaviour
         aiAgent.isStopped = false;
         float dist = aiAgent.remainingDistance;
         // print(aiAgent.remainingDistance);
+        patrolCountdown -= Time.deltaTime;
         if (dist != Mathf.Infinity && aiAgent.pathStatus == NavMeshPathStatus.PathComplete && aiAgent.remainingDistance <= 3)
         {
             patrolCountdown -= Time.deltaTime;
+            isMoving = false;
             if (patrolCountdown <= 0)
             {
                 aiAgent.SetDestination(RandomNavmeshLocation(patrolRadius));
+                isMoving = true;
                 patrolCountdown = patrolMaxTimer;
             }
             
         }
+        RandomLook();
     }
 
-    public Vector3 RandomNavmeshLocation(float radius)
+    private Vector3 RandomNavmeshLocation(float radius)
     {
         Vector3 randomDirection = Random.insideUnitSphere * radius;
         randomDirection += transform.position;
@@ -66,5 +84,19 @@ public class ZombieMovement : MonoBehaviour
             finalPosition = hit.position;
         }
         return finalPosition;
+    }
+
+    private void RandomLook()
+    {
+        if (!isMoving)
+        {
+            patrolLookCountdown -= Time.deltaTime;
+            if (patrolLookCountdown <= 0)
+            {
+                randomLookAxis = Quaternion.AngleAxis(Random.Range(-30f, 30f), Vector3.up);
+                patrolLookCountdown = patrolLookMaxTimer;
+            }
+            transform.rotation = Quaternion.Slerp(transform.rotation, randomLookAxis, Time.deltaTime * 1);
+        }
     }
 }
