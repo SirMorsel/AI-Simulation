@@ -9,7 +9,7 @@ public class ZombieDetectionSenses : MonoBehaviour
     private ZombieStats zombieStats;
     
 
-    public GameObject player; // WIP
+    private PlayerController player; // WIP
 
     private bool seesPlayer = false;
     private bool hearsSomething = false;
@@ -21,6 +21,7 @@ public class ZombieDetectionSenses : MonoBehaviour
         noiseManager = NoiseManager.Instance;
         zombieBehaviour = this.GetComponent<ZombieBehaviour>();
         zombieStats = this.GetComponent<ZombieStats>();
+        player = PlayerController.Instance;
     }
 
     // Update is called once per frame

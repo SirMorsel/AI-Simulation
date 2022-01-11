@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     // [SerializeField] private float jumpForce = 8.0F;
     // [SerializeField] private float gravity = 9.81F;
 
-    private Transform playerModel;
+    //private Transform playerModel;
 
     private Vector3 moveDirection = Vector3.zero;
 
@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             _instance = this;
-            playerModel = this.transform.GetChild(0);
+            //playerModel = this.transform.GetChild(0);
         }
     }
 
@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour
             {
                 movementSpeed = runSpeed;
             }
-            playerModel.rotation = Quaternion.Slerp(playerModel.rotation, Quaternion.LookRotation(movement), Time.deltaTime * turnSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), Time.deltaTime * turnSpeed);
             transform.Translate(movement * movementSpeed * Time.deltaTime, Space.World);
         }
     }

@@ -68,8 +68,15 @@ public class ZombieMovement : MonoBehaviour
                 isMoving = true;
                 patrolCountdown = patrolMaxTimer;
             }
-            
         }
+        RandomLook();
+    }
+
+    public void PatrolWithHorde(Vector3 formationPosition)
+    {
+        aiAgent.isStopped = false;
+        aiAgent.SetDestination(formationPosition);
+        isMoving = true;
         RandomLook();
     }
 
@@ -98,5 +105,13 @@ public class ZombieMovement : MonoBehaviour
             }
             transform.rotation = Quaternion.Slerp(transform.rotation, randomLookAxis, Time.deltaTime * 1);
         }
+    }
+
+    public void LookAtTarget(Transform target)
+    {
+        Vector3 lookPos = target.position - transform.position;
+        lookPos.y = 0;
+        Quaternion rotation = Quaternion.LookRotation(lookPos);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 1);
     }
 }
