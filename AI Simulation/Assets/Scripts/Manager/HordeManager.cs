@@ -118,14 +118,13 @@ public class HordeManager : MonoBehaviour
         return hordeList[0] == zombie;
     }
 
-    public void HordePatrol()
+    public void HordePatrolFormation()
     {
         foreach (var zombie in hordeList)
         {
             if (CheckIfIsZombieLeader(zombie))
             {
                 ClearFormationPositionList();
-                // zombie.GetComponent<ZombieMovement>().MoveToTarget(GetRingPosition(zombie, zombie.GetComponent<ZombieStats>().GetZombieSpeed(), ));
                 for (int i = 0; i < ringDistance.Length; i++)
                 {
                     formationPositionList.AddRange(GetRingPosition(zombie.transform.position, ringDistance[i], ringPositionCount[i]));

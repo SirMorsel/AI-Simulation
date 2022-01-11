@@ -6,6 +6,7 @@ public class ZombieBehaviour : MonoBehaviour
 {
     private HordeManager hordeManager;
 
+    private ZombieAttackBehaviour zombieAttackBehaviour;
     private ZombieDetectionSenses zombieDetectionSenses;
     private ZombieMovement zombieMovement;
     private ZombieStats zombieStats;
@@ -26,6 +27,7 @@ public class ZombieBehaviour : MonoBehaviour
     void Start()
     {
         hordeManager = HordeManager.Instance;
+        zombieAttackBehaviour = this.GetComponent<ZombieAttackBehaviour>();
         zombieDetectionSenses = this.GetComponent<ZombieDetectionSenses>();
         zombieMovement = this.GetComponent<ZombieMovement>();
         zombieStats = this.GetComponent<ZombieStats>();
@@ -45,14 +47,19 @@ public class ZombieBehaviour : MonoBehaviour
         StateMachine();
     }
 
+    private void OnDestroy()
+    {
+        hordeManager.RemoveFromHorde(this.gameObject);
+    }
+
     private void StateMachine()
     {
         switch (currentBehaviour)
         {
             case EnumZombieBehaviour.IDLE:
                 //print($"State: {currentBehaviour}");
-                zombieMovement.PatrolWithoutHorde();
-                hordeManager.HordePatrol();
+                
+                // hordeManager.HordePatrol();
                 if (zombieDetectionSenses.CheckIfHearsSomething())
                 {
                     currentBehaviour = EnumZombieBehaviour.SEARCH;
@@ -61,18 +68,16 @@ public class ZombieBehaviour : MonoBehaviour
                 {
                     currentBehaviour = EnumZombieBehaviour.DETECT;
                 }
-
                 if (isInHorde)
                 {
-                    // (inHorde) send command to all in horde if in idle
-                    if (hordeManager.CheckIfIsZombieLeader(this.gameObject))
+                    zombieMovement.PatrolWithoutHorde();
+                    hordeManager.HordePatrolFormation();
+                    if (!hordeManager.CheckIfIsZombieLeader(this.gameObject))
                     {
-                        // horde move with all zombies behavior == idle
-                        
-                    }
-                    else
-                    {
-                        zombieMovement.PatrolWithHorde(hordeManager.GetFormationList()[hordeManager.GetIndexOfZombieInHordeList(this.gameObject)]);
+                        if (currentBehaviour == EnumZombieBehaviour.IDLE)
+                        {
+                            zombieMovement.PatrolWithHorde(hordeManager.GetFormationList()[hordeManager.GetIndexOfZombieInHordeList(this.gameObject)]);
+                        }
                     }
                 }
                 else
@@ -171,10 +176,12 @@ public class ZombieBehaviour : MonoBehaviour
                 if (CheckIfIsInRange(zombieDetectionSenses.GetPlayerPosition(), zombieStats.GetZombieAttackRange())) // check if player is in attack range
                 {
                     // attck funtion
+                    zombieAttackBehaviour.Attack();
                     print("Hit player with attack");
                 }
                 else
                 {
+                    zombieAttackBehaviour.ResetAttackCountdown();
                     currentBehaviour = EnumZombieBehaviour.CHASE;
                 }
                 break;

@@ -8,15 +8,7 @@ public class PlayerController : MonoBehaviour
     private static PlayerController _instance;
     public static PlayerController Instance { get { return _instance; } }
 
-    [SerializeField] private float walkSpeed = 5.0F;
-    [SerializeField] private float runSpeed = 10.0F;
-    [SerializeField] private float turnSpeed = 10.0F;
-    // [SerializeField] private float jumpForce = 8.0F;
-    // [SerializeField] private float gravity = 9.81F;
-
-    //private Transform playerModel;
-
-    private Vector3 moveDirection = Vector3.zero;
+    private PlayerStats playerStats;
 
     private void Awake()
     {
@@ -27,8 +19,12 @@ public class PlayerController : MonoBehaviour
         else
         {
             _instance = this;
-            //playerModel = this.transform.GetChild(0);
         }
+    }
+
+    void Start()
+    {
+        playerStats = this.GetComponent<PlayerStats>();
     }
 
     // Update is called once per frame
@@ -45,12 +41,12 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
         if (movement != Vector3.zero)
         {
-            float movementSpeed = walkSpeed;
+            float movementSpeed = playerStats.GetWalkSpeed();
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                movementSpeed = runSpeed;
+                movementSpeed = playerStats.GetRunSpeed();
             }
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), Time.deltaTime * turnSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), Time.deltaTime * playerStats.GetTurnSpeed());
             transform.Translate(movement * movementSpeed * Time.deltaTime, Space.World);
         }
     }
