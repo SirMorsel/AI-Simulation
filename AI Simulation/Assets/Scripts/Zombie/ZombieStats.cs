@@ -14,10 +14,19 @@ public class ZombieStats : MonoBehaviour
     private float zombieSpeed;
     private float zombieAttackDamage;
     private float zombieMaxAttackRange;
+    private float zombieAttackInterval; //
 
     private float zombieEyeDetectionAngle;
     private float zombieEyeDetectionMaxDistance;
     private float zombieHearDetectionRadius;
+
+    private float zombieSearchRateMaxTime;
+    private float zombieDetectionRateMaxTime;
+    private float zombieMaxSenseRange;
+
+    private float zombiePatrolMaxTimer;
+    private float zombiePatrolLookMaxTimer;
+    private float zombiePatrolRadius;
 
     private void Awake()
     {
@@ -44,10 +53,19 @@ public class ZombieStats : MonoBehaviour
         zombieSpeed = zombieData.Speed;
         zombieAttackDamage = zombieData.Damage;
         zombieMaxAttackRange = zombieData.MaxAttackRange;
+        zombieAttackInterval = zombieData.AttackInterval;
 
         zombieEyeDetectionAngle = zombieData.EyeDetectionAngle;
         zombieEyeDetectionMaxDistance = zombieData.EyeDetectionMaxDistance;
         zombieHearDetectionRadius = zombieData.HearDetectionRadius;
+
+        zombieSearchRateMaxTime = zombieData.SearchRateMaxTime;
+        zombieDetectionRateMaxTime = zombieData.DetectionRateMaxTime;
+        zombieMaxSenseRange = zombieData.MaxSenseRange;
+
+        zombiePatrolMaxTimer = zombieData.PatrolMaxTimer;
+        zombiePatrolLookMaxTimer = zombieData.PatrolLookMaxTimer;
+        zombiePatrolRadius = zombieData.PatrolRadius;
 
         currentZombieHealth = zombieMaxHealth;
     }
@@ -94,5 +112,40 @@ public class ZombieStats : MonoBehaviour
     public float GetZombieAttackRange()
     {
         return zombieMaxAttackRange;
+    }
+
+    public float GetZombieAttackInterval()
+    {
+        return zombieAttackInterval;
+    }
+
+    public float GetZombiePatrolMaxTimer()
+    {
+        return zombiePatrolMaxTimer;
+    }
+
+    public float GetZombiePatrolLookMaxTimer()
+    {
+        return zombiePatrolLookMaxTimer;
+    }
+
+    public float GetZombiePatrolRadius()
+    {
+        return zombiePatrolRadius;
+    }
+
+    public float GetZombieSearchRateMaxTime()
+    {
+        return zombieSearchRateMaxTime;
+    }
+
+    public float GetZombieDetectionRateMaxTime()
+    {
+        return zombieDetectionRateMaxTime;
+    }
+
+    public float GetZombieMaxSenseRange()
+    {
+        return zombieMaxSenseRange;
     }
 }

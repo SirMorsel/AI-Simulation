@@ -18,6 +18,13 @@ MonoBehaviour:
   Speed: 2
   Damage: 5
   MaxAttackRange: 2.5
+  AttackInterval: 2
   EyeDetectionAngle: 60
   EyeDetectionMaxDistance: 10
   HearDetectionRadius: 20
+  SearchRateMaxTime: 10
+  DetectionRateMaxTime: 5
+  MaxSenseRange: 10
+  PatrolMaxTimer: 10
+  PatrolLookMaxTimer: 3
+  PatrolRadius: 15

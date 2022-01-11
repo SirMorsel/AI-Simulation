@@ -9,12 +9,8 @@ public class ZombieMovement : MonoBehaviour
     private NavMeshAgent aiAgent;
 
     private float patrolCountdown;
-    private float patrolMaxTimer = 10f;
 
     private float patrolLookCountdown;
-    private float patrolLookMaxTimer = 3f;
-
-    private float patrolRadius = 15f;
     private bool isMoving = false;
 
     private Quaternion randomLookAxis = Quaternion.AngleAxis(90, Vector3.up);
@@ -27,7 +23,7 @@ public class ZombieMovement : MonoBehaviour
         aiAgent = this.GetComponent<NavMeshAgent>();
         // zombieStats.PrintZombieData();
         aiAgent.speed = zombieStats.GetZombieSpeed();
-        patrolCountdown = patrolMaxTimer;
+        patrolCountdown = zombieStats.GetZombiePatrolMaxTimer();
     }
 
     private void Update()
@@ -64,9 +60,9 @@ public class ZombieMovement : MonoBehaviour
             isMoving = false;
             if (patrolCountdown <= 0)
             {
-                aiAgent.SetDestination(RandomNavmeshLocation(patrolRadius));
+                aiAgent.SetDestination(RandomNavmeshLocation(zombieStats.GetZombiePatrolRadius()));
                 isMoving = true;
-                patrolCountdown = patrolMaxTimer;
+                patrolCountdown = zombieStats.GetZombiePatrolMaxTimer();
             }
         }
         RandomLook();
@@ -101,7 +97,7 @@ public class ZombieMovement : MonoBehaviour
             if (patrolLookCountdown <= 0)
             {
                 randomLookAxis = Quaternion.AngleAxis(Random.Range(-30f, 30f), Vector3.up);
-                patrolLookCountdown = patrolLookMaxTimer;
+                patrolLookCountdown = zombieStats.GetZombiePatrolLookMaxTimer();
             }
             transform.rotation = Quaternion.Slerp(transform.rotation, randomLookAxis, Time.deltaTime * 1);
         }

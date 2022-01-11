@@ -12,8 +12,17 @@ public class ScriptableZombie : ScriptableObject
     public float Speed;
     public float Damage;
     public float MaxAttackRange;
+    public float AttackInterval;
 
     public float EyeDetectionAngle;
     public float EyeDetectionMaxDistance;
     public float HearDetectionRadius;
+
+    public float SearchRateMaxTime;
+    public float DetectionRateMaxTime;
+    public float MaxSenseRange;
+
+    public float PatrolMaxTimer;
+    public float PatrolLookMaxTimer;
+    public float PatrolRadius;
 }
