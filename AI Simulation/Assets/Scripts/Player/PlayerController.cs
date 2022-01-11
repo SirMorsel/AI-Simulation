@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance { get { return _instance; } }
 
     private PlayerStats playerStats;
+    private UIManager uiManager;
 
     private void Awake()
     {
@@ -25,6 +26,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         playerStats = this.GetComponent<PlayerStats>();
+        uiManager = UIManager.Instance;
     }
 
     // Update is called once per frame
@@ -48,6 +50,35 @@ public class PlayerController : MonoBehaviour
             }
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), Time.deltaTime * playerStats.GetTurnSpeed());
             transform.Translate(movement * movementSpeed * Time.deltaTime, Space.World);
+        }
+    }
+    /*
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Interactable")
+        {
+            print("OnScreen");
+        }
+    }*/
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Interactable")
+        {
+            uiManager.ChangeInteractableUITextVisibility(true); ;
+            if (Input.GetKey(KeyCode.E))
+            {
+                // activate
+                other.gameObject.GetComponent<Noise>().ActivateNoise();
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Interactable")
+        {
+            uiManager.ChangeInteractableUITextVisibility(false);
         }
     }
 }

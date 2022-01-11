@@ -86,9 +86,9 @@ public class ZombieBehaviour : MonoBehaviour
                 zombieMovement.MoveToTarget(zombieDetectionSenses.GetPositionOfNoise(), zombieStats.GetZombieSpeed(), 3f);
                 if (zombieDetectionSenses.GetPositionOfNoise() != null)
                 {
-                    if (CheckIfIsInRange(zombieDetectionSenses.GetPositionOfNoise(), 3f)) // check if target is in range
+                    if (CheckIfIsInRange(zombieDetectionSenses.GetPositionOfNoise(), 5f)) // check if target is in range
                     {
-                        // check if is in horde
+                        // check if is in horde?
                        // print("Is looking");
                         searchCountdown -= Time.deltaTime;
                         if (zombieDetectionSenses.CheckIfSeesPlayer()) // sees player

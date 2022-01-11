@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour
 {
     private GameManager gameManager;
+    private UIManager uiManager;
     [SerializeField] private float maxHealth = 250.0F;
     [SerializeField] private float walkSpeed = 5.0F;
     [SerializeField] private float runSpeed = 10.0F;
@@ -20,6 +21,8 @@ public class PlayerStats : MonoBehaviour
     void Start()
     {
         gameManager = GameManager.Instance;
+        uiManager = UIManager.Instance;
+        uiManager.SetHealthTextFieldText(currentHealth, maxHealth);
     }
 
     // Update is called once per frame
@@ -55,5 +58,6 @@ public class PlayerStats : MonoBehaviour
         {
             gameManager.RestartScene();
         }
+        uiManager.SetHealthTextFieldText(currentHealth, maxHealth);
     }
 }
