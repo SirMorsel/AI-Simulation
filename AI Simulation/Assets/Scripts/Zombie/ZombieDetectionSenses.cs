@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ZombieDetectionSenses : MonoBehaviour
@@ -58,23 +59,17 @@ public class ZombieDetectionSenses : MonoBehaviour
 
     private void VisualDetection(Transform target)
     {
+        CheckPath(transform.position, target.position);
+        print(CheckPath(transform.position, target.position));
         Vector3 targetDir = target.position - transform.position;
         float angle = Vector3.Angle(targetDir, transform.forward);
         if (angle < zombieStats.GetZombieEyeDetectionAngle() * 0.5f && CheckIfIsInVisualView(target))
         {
-            RaycastHit hit;
-            if (Physics.Linecast(transform.position, target.transform.position, out hit))
+            //RaycastHit hit;
+            if (CheckPath(transform.position, target.position))
             {
-                // print(hit.transform.name);
-                if (hit.transform.tag == "Player")
-                {
-                    print("I see you!");
-                    seesPlayer = true;
-                }
-                else
-                {
-                    seesPlayer = false;
-                }
+                print("I see you!");
+                seesPlayer = true;
             }
             else
             {
@@ -161,5 +156,22 @@ public class ZombieDetectionSenses : MonoBehaviour
     public void RemovePositionOfNoise()
     {
         noisePosition = null;
+    }
+
+    private bool CheckPath(Vector3 position, Vector3 target)
+    {
+        Vector3 halfExtents = Vector3.one;
+
+        Quaternion rotation = Quaternion.LookRotation(target - position);
+        Vector3 direction = target - position;
+        float distance = Vector3.Distance(position, target);
+
+        RaycastHit[] rhit = Physics.BoxCastAll(position, halfExtents, direction, rotation, distance);
+        bool result = rhit.All(r => r.collider.tag != "Environment");
+
+        Vector3 center = Vector3.Lerp(position, target, 0.5f);
+        halfExtents = new Vector3(1, 1, (target - position).magnitude) / 2;
+        Debug.DrawRay(position, direction, result ? Color.green : Color.red);
+        return result;
     }
 }

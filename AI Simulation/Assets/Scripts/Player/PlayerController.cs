@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     private PlayerStats playerStats;
     private UIManager uiManager;
 
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform bulletSpawn;
+
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -33,6 +36,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Move();
+        Shoot();
     }
 
     private void Move()
@@ -52,14 +56,15 @@ public class PlayerController : MonoBehaviour
             transform.Translate(movement * movementSpeed * Time.deltaTime, Space.World);
         }
     }
-    /*
-    private void OnTriggerEnter(Collider other)
+
+    private void Shoot()
     {
-        if (other.tag == "Interactable")
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            print("OnScreen");
+            GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+            bullet.GetComponent<Rigidbody>().AddForce(bulletSpawn.forward * bullet.GetComponent<Bullet>().GetSpeed());
         }
-    }*/
+    }
 
     private void OnTriggerStay(Collider other)
     {

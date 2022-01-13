@@ -55,14 +55,7 @@ public class ZombieBehaviour : MonoBehaviour
                 //print($"State: {currentBehaviour}");
                 
                 // hordeManager.HordePatrol();
-                if (zombieDetectionSenses.CheckIfHearsSomething())
-                {
-                    currentBehaviour = EnumZombieBehaviour.SEARCH;
-                }
-                if (zombieDetectionSenses.CheckIfSeesPlayer())
-                {
-                    currentBehaviour = EnumZombieBehaviour.DETECT;
-                }
+                
                 if (isInHorde)
                 {
                     zombieMovement.PatrolWithoutHorde();
@@ -79,7 +72,15 @@ public class ZombieBehaviour : MonoBehaviour
                 {
                     zombieMovement.PatrolWithoutHorde();
                 }
-                
+                if (zombieDetectionSenses.CheckIfHearsSomething())
+                {
+                    currentBehaviour = EnumZombieBehaviour.SEARCH;
+                }
+                if (zombieDetectionSenses.CheckIfSeesPlayer())
+                {
+                    currentBehaviour = EnumZombieBehaviour.DETECT;
+                }
+
                 break;
             case EnumZombieBehaviour.SEARCH:
                 //print($"State: {currentBehaviour}");

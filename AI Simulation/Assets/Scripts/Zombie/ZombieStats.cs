@@ -148,4 +148,14 @@ public class ZombieStats : MonoBehaviour
     {
         return zombieMaxSenseRange;
     }
+
+    public void SetZombieHealth(float damage)
+    {
+        currentZombieHealth -= damage;
+        print($"New health: {currentZombieHealth}");
+        if (currentZombieHealth <= 0)
+        {
+            Destroy(this.gameObject);
+        }
+    }
 }
