@@ -11,9 +11,6 @@ public class PlayerController : MonoBehaviour
     private PlayerStats playerStats;
     private UIManager uiManager;
 
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private Transform bulletSpawn;
-
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -36,7 +33,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Move();
-        Shoot();
     }
 
     private void Move()
@@ -54,15 +50,6 @@ public class PlayerController : MonoBehaviour
             }
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), Time.deltaTime * playerStats.GetTurnSpeed());
             transform.Translate(movement * movementSpeed * Time.deltaTime, Space.World);
-        }
-    }
-
-    private void Shoot()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
-            bullet.GetComponent<Rigidbody>().AddForce(bulletSpawn.forward * bullet.GetComponent<Bullet>().GetSpeed());
         }
     }
 

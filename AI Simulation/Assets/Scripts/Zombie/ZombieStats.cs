@@ -28,6 +28,8 @@ public class ZombieStats : MonoBehaviour
     private float zombiePatrolLookMaxTimer;
     private float zombiePatrolRadius;
 
+    private bool isInAgroMode = false;
+
     private void Awake()
     {
         InitializeZombieData();
@@ -152,6 +154,7 @@ public class ZombieStats : MonoBehaviour
     public void SetZombieHealth(float damage)
     {
         currentZombieHealth -= damage;
+        
         print($"New health: {currentZombieHealth}");
         if (currentZombieHealth <= 0)
         {

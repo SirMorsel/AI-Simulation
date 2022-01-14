@@ -60,11 +60,11 @@ public class HordeManager : MonoBehaviour
         foreach (var zombie in hordeList)
         {
             zombie.GetComponent<ZombieBehaviour>().OverrideStage(EnumZombieBehaviour.CHASE);
-            print($"Send command to zombie: {zombie.name}");
+            //print($"Send command to zombie: {zombie.name}");
         }
     }
 
-    public void SetPlayerSeesPlayerStatus(bool state)
+    public void SetSeesPlayerStatus(bool state)
     {
         hordeSeesPlayer = state;
     }
@@ -78,18 +78,21 @@ public class HordeManager : MonoBehaviour
     {
         foreach (var zombie in hordeList)
         {
+            
             // check if a zombie is in range
             if (CheckIfIsInRange(zombie.transform, player.transform, 10f))
             {
-                SetPlayerSeesPlayerStatus(true);
+                SetSeesPlayerStatus(true);
                 return;
             }
         }
-        SetPlayerSeesPlayerStatus(false);
+        print("nope");
+        SetSeesPlayerStatus(false);
     }
 
     private bool CheckIfIsInRange(Transform targetFrom, Transform targetTo, float maxRange)
     {
+
         //print($"Range: {(target.position - transform.position).sqrMagnitude} | {(maxRange * maxRange)}");
         if ((targetTo.position - targetFrom.position).sqrMagnitude < (maxRange * maxRange))
         {

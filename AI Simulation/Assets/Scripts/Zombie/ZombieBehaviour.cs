@@ -121,7 +121,7 @@ public class ZombieBehaviour : MonoBehaviour
                     {
                         if (isInHorde)
                         {
-                            hordeManager.SetPlayerSeesPlayerStatus(true);
+                            hordeManager.SetSeesPlayerStatus(true);
                             // set alarm to horde (All members in horde to chase)
                             hordeManager.SendAlarmToHorde();
                         }
@@ -189,7 +189,7 @@ public class ZombieBehaviour : MonoBehaviour
     private bool CheckIfIsInRange(Transform target, float maxRange)
     {
         //print($"Range: {(target.position - transform.position).sqrMagnitude} | {(maxRange * maxRange)}");
-        if ((target.position - transform.position).sqrMagnitude < (maxRange * maxRange))
+        if ((target.position - transform.position).sqrMagnitude < ((maxRange * maxRange)))
         {
             return true;
         }
