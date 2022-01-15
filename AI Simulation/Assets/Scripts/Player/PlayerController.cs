@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     private PlayerStats playerStats;
     private UIManager uiManager;
 
+    private float attackIntervalCountdown;
+    private bool isUsingMeleeAttack = false;
+
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -27,12 +30,21 @@ public class PlayerController : MonoBehaviour
     {
         playerStats = this.GetComponent<PlayerStats>();
         uiManager = UIManager.Instance;
+        attackIntervalCountdown = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
         Move();
+        if (isUsingMeleeAttack)
+        {
+            attackIntervalCountdown -= Time.deltaTime;
+            if (attackIntervalCountdown <= 0)
+            {
+                isUsingMeleeAttack = false;
+            }
+        }
     }
 
     private void Move()
@@ -53,16 +65,39 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void MeleeAttack(GameObject target)
+    {
+        if (Input.GetKey(KeyCode.Space) && !isUsingMeleeAttack)
+        {
+            isUsingMeleeAttack = true;
+            if (target.GetComponent<ZombieDetectionSenses>().CheckIfSeesPlayer())
+            {
+                print("Normal damage");
+                target.GetComponent<ZombieStats>().SetZombieHealth(playerStats.GetMeleeDamage());
+            }
+            else
+            {
+                print("Crit damage");
+                target.GetComponent<ZombieStats>().SetZombieHealth(playerStats.GetMeleeDamage() * playerStats.GetCritMultiplier());
+            }
+            attackIntervalCountdown = playerStats.GetAttackInterval();
+        }
+    }
+
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Interactable")
         {
-            uiManager.ChangeInteractableUITextVisibility(true); ;
+            uiManager.ChangeInteractableUITextVisibility(true);
             if (Input.GetKey(KeyCode.E))
             {
                 // activate
                 other.gameObject.GetComponent<Noise>().ActivateNoise();
             }
+        }
+        if (other.tag == "Enemy")
+        {
+            MeleeAttack(other.gameObject);
         }
     }
 
@@ -71,6 +106,10 @@ public class PlayerController : MonoBehaviour
         if (other.tag == "Interactable")
         {
             uiManager.ChangeInteractableUITextVisibility(false);
+        }
+        if (other.tag == "Enemy")
+        {
+            MeleeAttack(other.gameObject);
         }
     }
 }
