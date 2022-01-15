@@ -28,12 +28,10 @@ public class Noise : MonoBehaviour
         if (makeNoise)
         {
             soundCountdown -= Time.deltaTime;
-            print($"Sound: {soundCountdown}");
             obstaclesUI.ChangeCountdownUITextVisibility(true);
             obstaclesUI.SetCountdownValueOnTextField(soundCountdown);
             if (soundCountdown <= 0)
             {
-                print("Sound off");
                 makeNoise = false;
                 soundCountdown = soundDuration;
                 obstaclesUI.ChangeCountdownUITextVisibility(false);

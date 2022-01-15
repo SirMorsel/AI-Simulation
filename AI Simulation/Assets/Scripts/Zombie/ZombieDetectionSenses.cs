@@ -6,11 +6,10 @@ using UnityEngine;
 public class ZombieDetectionSenses : MonoBehaviour
 {
     private NoiseManager noiseManager;
-    private ZombieBehaviour zombieBehaviour;
     private ZombieStats zombieStats;
     
 
-    private PlayerController player; // WIP
+    private PlayerController player;
 
     private bool seesPlayer = false;
     private bool hearsSomething = false;
@@ -20,7 +19,6 @@ public class ZombieDetectionSenses : MonoBehaviour
     void Start()
     {
         noiseManager = NoiseManager.Instance;
-        zombieBehaviour = this.GetComponent<ZombieBehaviour>();
         zombieStats = this.GetComponent<ZombieStats>();
         player = PlayerController.Instance;
     }
@@ -60,15 +58,12 @@ public class ZombieDetectionSenses : MonoBehaviour
     private void VisualDetection(Transform target)
     {
         CheckPath(transform.position, target.position);
-        print(CheckPath(transform.position, target.position));
         Vector3 targetDir = target.position - transform.position;
         float angle = Vector3.Angle(targetDir, transform.forward);
         if (angle < zombieStats.GetZombieEyeDetectionAngle() * 0.5f && CheckIfIsInVisualView(target))
         {
-            //RaycastHit hit;
             if (CheckPath(transform.position, target.position))
             {
-                print("I see you!");
                 seesPlayer = true;
             }
             else
@@ -84,7 +79,6 @@ public class ZombieDetectionSenses : MonoBehaviour
 
     private void HearingDetection()
     {
-        // refactor calulation of target
         GameObject targetNoise = null;
         for (int i = 0; i < noiseManager.GetObjectsWithNoiseList().Count; i++)
         {
@@ -107,11 +101,8 @@ public class ZombieDetectionSenses : MonoBehaviour
         }
         if (targetNoise != null)
         {
-            print($"I hear you {targetNoise.name}!");
-            // move to target
             hearsSomething = true;
             noisePosition = targetNoise.transform;
-            //zombieBehaviour.ChangeStateOfZombie(EnumZombieBehaviour.SEARCH, targetNoise.transform);
         }
         else
         {
@@ -131,7 +122,6 @@ public class ZombieDetectionSenses : MonoBehaviour
 
     private float CalcNoiseVolumeValue(Transform target)
     {
-        // calc volume to set the target priority (noiseVolume and distance) // WIP
         return (target.position - transform.position).sqrMagnitude * target.GetComponent<Noise>().GetNoiseVolume();
     }
 

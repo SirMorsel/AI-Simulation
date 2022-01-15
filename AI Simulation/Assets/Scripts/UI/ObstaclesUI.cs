@@ -6,12 +6,12 @@ using TMPro;
 public class ObstaclesUI : MonoBehaviour
 {
     [SerializeField] private TMP_Text countdownTextField = null;
+
     // Start is called before the first frame update
     void Start()
     {
         ChangeCountdownUITextVisibility(false);
     }
-
 
     public void ChangeCountdownUITextVisibility(bool state)
     {

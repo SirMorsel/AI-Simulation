@@ -29,12 +29,6 @@ public class PlayerStats : MonoBehaviour
         uiManager.SetHealthTextFieldText(currentHealth, maxHealth);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        print($"Playerhealth: {GetCurrentHealth()}");
-    }
-
     public float GetCurrentHealth()
     {
         return currentHealth;

@@ -6,6 +6,8 @@ public class ZombieStats : MonoBehaviour
 {
     [SerializeField] private ScriptableZombie zombieData;
 
+    private GameManager gameManager;
+
     private string zombieDesignation;
     private string zombieDescription;
 
@@ -14,7 +16,7 @@ public class ZombieStats : MonoBehaviour
     private float zombieSpeed;
     private float zombieAttackDamage;
     private float zombieMaxAttackRange;
-    private float zombieAttackInterval; //
+    private float zombieAttackInterval;
 
     private float zombieEyeDetectionAngle;
     private float zombieEyeDetectionMaxDistance;
@@ -28,8 +30,6 @@ public class ZombieStats : MonoBehaviour
     private float zombiePatrolLookMaxTimer;
     private float zombiePatrolRadius;
 
-    private bool isInAgroMode = false;
-
     private void Awake()
     {
         InitializeZombieData();
@@ -37,13 +37,8 @@ public class ZombieStats : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        gameManager = GameManager.Instance;
+        gameManager.AddZombieToZombieList(this.gameObject);
     }
 
     private void InitializeZombieData()
@@ -151,6 +146,7 @@ public class ZombieStats : MonoBehaviour
         return zombieMaxSenseRange;
     }
 
+    // Setter
     public void SetZombieHealth(float damage)
     {
         currentZombieHealth -= damage;
@@ -158,6 +154,7 @@ public class ZombieStats : MonoBehaviour
         print($"New health: {currentZombieHealth}");
         if (currentZombieHealth <= 0)
         {
+            gameManager.RemoveZombieFromZombieList(this.gameObject);
             Destroy(this.gameObject);
         }
     }

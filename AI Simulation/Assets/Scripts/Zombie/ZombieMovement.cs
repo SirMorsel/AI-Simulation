@@ -26,11 +26,6 @@ public class ZombieMovement : MonoBehaviour
         patrolCountdown = zombieStats.GetZombiePatrolMaxTimer();
     }
 
-    private void Update()
-    {
-        // print(isMoving);
-    }
-
     public void MoveToTarget(Transform target, float speed, float offset = 0)
     {
         aiAgent.isStopped = false;
@@ -45,14 +40,12 @@ public class ZombieMovement : MonoBehaviour
         aiAgent.isStopped = true;
         isMoving = false;
         aiAgent.ResetPath();
-        print($"AGENT->>>>> {aiAgent.isStopped}");
     }
 
     public void PatrolWithoutHorde()
     {
         aiAgent.isStopped = false;
         float dist = aiAgent.remainingDistance;
-        // print(aiAgent.remainingDistance);
         patrolCountdown -= Time.deltaTime;
         if (dist != Mathf.Infinity && aiAgent.pathStatus == NavMeshPathStatus.PathComplete && aiAgent.remainingDistance <= 3)
         {

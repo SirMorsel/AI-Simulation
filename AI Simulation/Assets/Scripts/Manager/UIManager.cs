@@ -43,7 +43,6 @@ public class UIManager : MonoBehaviour
 
     public void SetHealthTextFieldText(float currentHealth, float maxHealth)
     {
-        print("aaaaaaaaaa");
         healthTextField.text = $"Health: {currentHealth} / {maxHealth}";
     }
 }

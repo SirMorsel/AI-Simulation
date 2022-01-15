@@ -91,7 +91,6 @@ public class PlayerController : MonoBehaviour
             uiManager.ChangeInteractableUITextVisibility(true);
             if (Input.GetKey(KeyCode.E))
             {
-                // activate
                 other.gameObject.GetComponent<Noise>().ActivateNoise();
             }
         }

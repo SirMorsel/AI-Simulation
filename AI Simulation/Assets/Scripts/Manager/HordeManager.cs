@@ -78,15 +78,12 @@ public class HordeManager : MonoBehaviour
     {
         foreach (var zombie in hordeList)
         {
-            
-            // check if a zombie is in range
             if (CheckIfIsInRange(zombie.transform, player.transform, 10f))
             {
                 SetSeesPlayerStatus(true);
                 return;
             }
         }
-        print("nope");
         SetSeesPlayerStatus(false);
     }
 

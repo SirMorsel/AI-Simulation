@@ -16,6 +16,10 @@ public class ZombieBehaviour : MonoBehaviour
     private float searchCountdown;
     private float detectionCountdown;
 
+    // This timer is used to prevent any freezing in certain state conditions by automatically returning the agent to the idle state after the timer has expired.
+    private float failsafeMaxTime = 20.0F;
+    private float failSafeCountdown;
+
     [SerializeField] private bool isInHorde = false;
 
     // Start is called before the first frame update
@@ -27,8 +31,9 @@ public class ZombieBehaviour : MonoBehaviour
         zombieMovement = this.GetComponent<ZombieMovement>();
         zombieStats = this.GetComponent<ZombieStats>();
 
-        searchCountdown = zombieStats.GetZombieSearchRateMaxTime();//searchRateMaxTime;
-        detectionCountdown = zombieStats.GetZombieDetectionRateMaxTime();//detectionRateMaxTime;
+        searchCountdown = zombieStats.GetZombieSearchRateMaxTime();
+        detectionCountdown = zombieStats.GetZombieDetectionRateMaxTime();
+        failSafeCountdown = failsafeMaxTime;
 
         if (isInHorde)
         {
@@ -53,9 +58,6 @@ public class ZombieBehaviour : MonoBehaviour
         {
             case EnumZombieBehaviour.IDLE:
                 //print($"State: {currentBehaviour}");
-                
-                // hordeManager.HordePatrol();
-                
                 if (isInHorde)
                 {
                     zombieMovement.PatrolWithoutHorde();
@@ -87,12 +89,12 @@ public class ZombieBehaviour : MonoBehaviour
                 zombieMovement.MoveToTarget(zombieDetectionSenses.GetPositionOfNoise(), zombieStats.GetZombieSpeed(), 3f);
                 if (zombieDetectionSenses.GetPositionOfNoise() != null)
                 {
+                    
                     if (CheckIfIsInRange(zombieDetectionSenses.GetPositionOfNoise(), 5f)) // check if target is in range
                     {
-                        // check if is in horde?
                        // print("Is looking");
                         searchCountdown -= Time.deltaTime;
-                        if (zombieDetectionSenses.CheckIfSeesPlayer()) // sees player
+                        if (zombieDetectionSenses.CheckIfSeesPlayer())
                         {
                             currentBehaviour = EnumZombieBehaviour.DETECT;
                             searchCountdown = zombieStats.GetZombieSearchRateMaxTime();
@@ -106,7 +108,21 @@ public class ZombieBehaviour : MonoBehaviour
                             zombieDetectionSenses.RemovePositionOfNoise();
                             print("nothing found");
                         }
+                        failSafeCountdown = failsafeMaxTime;
                     }
+                    else
+                    {
+                        failSafeCountdown -= Time.deltaTime;
+                        if (failSafeCountdown <= 0)
+                        {
+                            currentBehaviour = EnumZombieBehaviour.IDLE;
+                            failSafeCountdown = failsafeMaxTime;
+                        }
+                    }
+                }
+                else
+                {
+                    currentBehaviour = EnumZombieBehaviour.IDLE;
                 }
                 break;
             case EnumZombieBehaviour.DETECT:
@@ -122,7 +138,6 @@ public class ZombieBehaviour : MonoBehaviour
                         if (isInHorde)
                         {
                             hordeManager.SetSeesPlayerStatus(true);
-                            // set alarm to horde (All members in horde to chase)
                             hordeManager.SendAlarmToHorde();
                         }
                         currentBehaviour = EnumZombieBehaviour.CHASE;
@@ -137,7 +152,7 @@ public class ZombieBehaviour : MonoBehaviour
                 break;
             case EnumZombieBehaviour.CHASE:
                 //print($"State: {currentBehaviour}");
-                zombieMovement.MoveToTarget(zombieDetectionSenses.GetPlayerPosition(), zombieStats.GetZombieSpeed(), 1f);
+                zombieMovement.MoveToTarget(zombieDetectionSenses.GetPlayerPosition(), zombieStats.GetZombieSpeed(), 1.5f);
 
                 if (CheckIfIsInRange(zombieDetectionSenses.GetPlayerPosition(), zombieStats.GetZombieAttackRange())) // check if is in attack range
                 {
@@ -150,7 +165,7 @@ public class ZombieBehaviour : MonoBehaviour
                     hordeManager.CheckIfAHordeMemberIsInRange();
                     if (!hordeManager.CheckIfHordeSeesPlayer())
                     {
-                        print("Horde out of range");
+                        //print("Horde out of range");
                         zombieMovement.StopMoving();
                         currentBehaviour = EnumZombieBehaviour.IDLE;
                     }
@@ -159,7 +174,7 @@ public class ZombieBehaviour : MonoBehaviour
                 {
                     if (!CheckIfIsInRange(zombieDetectionSenses.GetPlayerPosition(), zombieStats.GetZombieMaxSenseRange())) // check if player is out of max chase range
                     {
-                        print("Out of range");
+                        //print("Out of range");
                         zombieMovement.StopMoving();
                         currentBehaviour = EnumZombieBehaviour.IDLE;
                     }
@@ -171,9 +186,7 @@ public class ZombieBehaviour : MonoBehaviour
                 //print($"State: {currentBehaviour}");
                 if (CheckIfIsInRange(zombieDetectionSenses.GetPlayerPosition(), zombieStats.GetZombieAttackRange())) // check if player is in attack range
                 {
-                    // attck funtion
                     zombieAttackBehaviour.Attack();
-                    print("Hit player with attack");
                 }
                 else
                 {
