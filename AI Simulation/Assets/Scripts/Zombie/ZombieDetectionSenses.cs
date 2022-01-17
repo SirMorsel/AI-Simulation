@@ -85,7 +85,6 @@ public class ZombieDetectionSenses : MonoBehaviour
             GameObject objectWithNoise = noiseManager.GetObjectsWithNoiseList()[i];
             if (objectWithNoise.GetComponent<Noise>().CheckIfIsMakingNoise() && CheckIfIsInHearingRange(objectWithNoise.transform))
             {
-                //print($"I hear you {objectWithNoise.name}!");
                 if (targetNoise != null)
                 {
                     if (CalcNoiseVolumeValue(objectWithNoise.transform) > CalcNoiseVolumeValue(targetNoise.transform))
@@ -150,7 +149,7 @@ public class ZombieDetectionSenses : MonoBehaviour
 
     private bool CheckPath(Vector3 position, Vector3 target)
     {
-        Vector3 halfExtents = Vector3.one;
+        Vector3 halfExtents = Vector3.zero;
 
         Quaternion rotation = Quaternion.LookRotation(target - position);
         Vector3 direction = target - position;
@@ -160,7 +159,7 @@ public class ZombieDetectionSenses : MonoBehaviour
         bool result = rhit.All(r => r.collider.tag != "Environment");
 
         Vector3 center = Vector3.Lerp(position, target, 0.5f);
-        halfExtents = new Vector3(1, 1, (target - position).magnitude) / 2;
+        halfExtents = new Vector3(1, 1, (target - position).sqrMagnitude) * 0.5F;
         Debug.DrawRay(position, direction, result ? Color.green : Color.red);
         return result;
     }

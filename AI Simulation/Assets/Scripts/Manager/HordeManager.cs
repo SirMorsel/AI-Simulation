@@ -60,7 +60,6 @@ public class HordeManager : MonoBehaviour
         foreach (var zombie in hordeList)
         {
             zombie.GetComponent<ZombieBehaviour>().OverrideStage(EnumZombieBehaviour.CHASE);
-            //print($"Send command to zombie: {zombie.name}");
         }
     }
 
@@ -89,8 +88,6 @@ public class HordeManager : MonoBehaviour
 
     private bool CheckIfIsInRange(Transform targetFrom, Transform targetTo, float maxRange)
     {
-
-        //print($"Range: {(target.position - transform.position).sqrMagnitude} | {(maxRange * maxRange)}");
         if ((targetTo.position - targetFrom.position).sqrMagnitude < (maxRange * maxRange))
         {
             return true;
@@ -114,7 +111,6 @@ public class HordeManager : MonoBehaviour
 
     public bool CheckIfIsZombieLeader(GameObject zombie)
     {
-        //print($"Zombie {zombie.name} is lieader: {hordeList[0] == zombie}");
         return hordeList[0] == zombie;
     }
 

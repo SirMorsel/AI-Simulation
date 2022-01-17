@@ -21,7 +21,6 @@ public class ZombieMovement : MonoBehaviour
     {
         zombieStats = this.GetComponent<ZombieStats>();
         aiAgent = this.GetComponent<NavMeshAgent>();
-        // zombieStats.PrintZombieData();
         aiAgent.speed = zombieStats.GetZombieSpeed();
         patrolCountdown = zombieStats.GetZombiePatrolMaxTimer();
     }
@@ -42,7 +41,7 @@ public class ZombieMovement : MonoBehaviour
         aiAgent.ResetPath();
     }
 
-    public void PatrolWithoutHorde()
+    public void Patrol()
     {
         aiAgent.isStopped = false;
         float dist = aiAgent.remainingDistance;
