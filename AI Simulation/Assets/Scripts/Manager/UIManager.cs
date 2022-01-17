@@ -33,4 +33,9 @@ public class UIManager : MonoBehaviour
     {
         healthTextField.text = $"Health: {currentHealth} / {maxHealth}";
     }
+
+    public void CloseApplication()
+    {
+        Application.Quit();
+    }
 }

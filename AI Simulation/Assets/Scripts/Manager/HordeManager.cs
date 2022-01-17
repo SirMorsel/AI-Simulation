@@ -14,8 +14,8 @@ public class HordeManager : MonoBehaviour
 
     private bool hordeSeesPlayer = false;
 
-    private int[] ringPositionCount = { 5, 10, 20, 30, 34 };
-    private float[] ringDistance = { 5f, 10f, 15f, 20f, 25f }; /*{ 2f, 4f, 6f, 8f, 10f };*/
+    [SerializeField] private int[] ringPositionCount = { 5, 10, 20, 30, 34 };
+    [SerializeField] private float[] ringDistance = { 5f, 10f, 15f, 20f, 25f }; /*{ 2f, 4f, 6f, 8f, 10f };*/
 
     private void Awake()
     {
